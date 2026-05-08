@@ -1,0 +1,220 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&family=Montserrat:wght@400;700;900&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .wrap {
+    min-height: 560px;
+    background: linear-gradient(155deg, #bfceff 0%, #d4caf8 28%, #e2cef7 55%, #ecd4f8 78%, #f5defa 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .card {
+    width: 100%;
+    max-width: 380px;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 28px;
+    border: 1.5px solid rgba(255,255,255,0.9);
+    box-shadow: 0 8px 40px rgba(130,110,200,0.18);
+    overflow: hidden;
+  }
+
+  /* ── TOP: photo + info side by side ── */
+  .card-top {
+    background: linear-gradient(150deg, #b4c2ff 0%, #cbbff5 45%, #dac7f5 100%);
+    padding: 16px 16px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  .photo-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 130px;
+  }
+  .profile-img {
+    width: 130px;
+    height: 168px;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 18px 18px 0 0;
+    display: block;
+    border: 2px solid rgba(255,255,255,0.75);
+    box-shadow: 0 4px 18px rgba(120,100,190,0.22);
+  }
+  .photo-edit-btn {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.88);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(100,80,180,0.25);
+    transition: background 0.15s, transform 0.12s;
+    z-index: 10;
+  }
+  .photo-edit-btn:hover { background: #fff; transform: scale(1.1); }
+  .photo-edit-btn i { font-size: 15px; color: #5040a0; }
+  #fileInput { display: none; }
+
+  /* placeholder when no photo */
+  .photo-placeholder {
+    width: 130px;
+    height: 168px;
+    border-radius: 18px 18px 0 0;
+    background: rgba(255,255,255,0.3);
+    border: 2px dashed rgba(160,140,215,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .photo-placeholder i { font-size: 26px; color: rgba(90,70,170,0.55); }
+  .photo-placeholder span { font-size: 10px; color: rgba(80,60,160,0.6); font-weight: 600; text-align: center; line-height: 1.4; }
+
+  /* right info panel */
+  .info-panel {
+    flex: 1;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .company-line { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 22px; line-height: 1; }
+  .company-line .red { color: #cc3535; }
+  .company-line .blue { color: #192d80; }
+  .company-line .corp { font-size: 14px; color: #253a90; margin-left: 1px; }
+  .company-sub { font-size: 9px; color: rgba(60,50,110,0.7); line-height: 1.5; margin-top: 2px; }
+  .divider { width: 100%; height: 1px; background: rgba(160,140,210,0.25); margin: 2px 0; }
+  .name-kr { font-size: 26px; font-weight: 900; color: #18154a; letter-spacing: -0.5px; }
+  .name-en { font-size: 11px; color: #7068a0; font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 0.8px; }
+  .title-text { font-size: 11px; font-weight: 700; color: #2c2460; line-height: 1.5; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+  .tag {
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 700;
+    background: rgba(185,175,240,0.28);
+    border: 1px solid rgba(155,135,210,0.3);
+    color: #4a3d90;
+  }
+
+  /* ── CONTACTS ── */
+  .contacts { padding: 2px 10px 10px; }
+  .contact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 6px;
+    border-bottom: 1px solid rgba(180,160,220,0.14);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: background 0.13s;
+    gap: 8px;
+  }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-row:hover { background: rgba(185,175,240,0.13); }
+  .contact-label { font-size: 11px; color: #9890c0; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+  .contact-value { font-size: 12px; font-weight: 700; color: #2c2460; text-align: right; word-break: break-all; }
+  .contact-value.youtube { color: #cc3535; }
+  .contact-value.addr { line-height: 1.5; }
+</style>
+
+<div class="wrap">
+  <div class="card">
+    <div class="card-top">
+
+      <!-- Photo -->
+      <div class="photo-wrap">
+        <div class="photo-placeholder" id="placeholder" onclick="document.getElementById('fileInput').click()">
+          <i class="ti ti-user" aria-hidden="true"></i>
+          <span>사진 추가<br>클릭</span>
+        </div>
+        <img class="profile-img" id="profileImg" style="display:none;" alt="프로필 사진" />
+        <button class="photo-edit-btn" id="editBtn" style="display:none;"
+          onclick="document.getElementById('fileInput').click()" title="사진 교체" aria-label="사진 교체">
+          <i class="ti ti-camera" aria-hidden="true"></i>
+        </button>
+        <input type="file" id="fileInput" accept="image/*" />
+      </div>
+
+      <!-- Info -->
+      <div class="info-panel">
+        <div>
+          <div class="company-line">
+            <span class="red">S&amp;</span><span class="blue">I</span><span class="corp">Corp.</span>
+          </div>
+          <div class="company-sub">공간경험의 새로운 가치를<br>창출하는 공간혁신기업</div>
+        </div>
+        <div class="divider"></div>
+        <div class="name-kr">최상록</div>
+        <div class="name-en">CHOI SANG ROCK</div>
+        <div class="title-text">리노베이션총괄<br>오창공사센터 | 전기전문가</div>
+        <div class="tags">
+          <span class="tag">공간경험 컨설팅</span>
+          <span class="tag">공장보전 솔루션</span>
+          <span class="tag">전기전문가</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Contacts -->
+    <div class="contacts">
+      <a href="tel:01071393547" class="contact-row">
+        <span class="contact-label">휴대전화</span>
+        <span class="contact-value">010-7139-3547</span>
+      </a>
+      <a href="mailto:rockcs81@sni.co.kr" class="contact-row">
+        <span class="contact-label">이메일</span>
+        <span class="contact-value">rockcs81@sni.co.kr</span>
+      </a>
+      <a href="https://www.sni.co.kr" target="_blank" class="contact-row">
+        <span class="contact-label">웹사이트</span>
+        <span class="contact-value">www.sni.co.kr</span>
+      </a>
+      <a href="https://youtube.com/@sni_corp" target="_blank" class="contact-row">
+        <span class="contact-label">유튜브</span>
+        <span class="contact-value youtube">S&amp;I Corp YouTube</span>
+      </a>
+      <a href="https://maps.google.com/?q=서울특별시 강서구 마곡중앙로 105-7" target="_blank" class="contact-row">
+        <span class="contact-label">주소</span>
+        <span class="contact-value addr">서울 강서구 마곡중앙로 105-7<br>K스퀘어마곡 타워1, 11-12층</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const profileImg = document.getElementById('profileImg');
+  const placeholder = document.getElementById('placeholder');
+  const editBtn = document.getElementById('editBtn');
+
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      profileImg.src = ev.target.result;
+      profileImg.style.display = 'block';
+      placeholder.style.display = 'none';
+      editBtn.style.display = 'flex';
+    };
+    reader.readAsDataURL(file);
+    fileInput.value = '';
+  });
+</script>
